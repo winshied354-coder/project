@@ -167,23 +167,22 @@
         margin-bottom: 36px;
       }
 
-      /* -------- NEW LIST LAYOUT -------- */
-      .wallet-list {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
+      .wallet-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
         width: 100%;
-        text-align: left;
       }
 
-      .wallet-item {
+      .wallet-card {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        justify-content: space-between;
-        padding: 16px 20px;
+        justify-content: center;
+        padding: 24px 16px;
         background: var(--bg-soft);
         border: 1px solid var(--border);
-        border-radius: 12px;
+        border-radius: 16px;
         cursor: pointer;
         transition:
           background-color 0.18s ease,
@@ -193,44 +192,44 @@
         user-select: none;
         text-decoration: none;
         color: inherit;
+        min-height: 130px;
       }
 
-      .wallet-item:hover {
+      .wallet-card:hover {
         background: #1a263e;
         border-color: #2f405e;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.5);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px -6px rgba(0, 0, 0, 0.5);
       }
 
-      .wallet-item:focus-visible {
+      .wallet-card:focus-visible {
         outline: 2px solid var(--accent);
         outline-offset: 2px;
       }
 
-      .wallet-item.selected {
+      .wallet-card.selected {
         border-color: var(--accent);
         background: #17233a;
         box-shadow: 0 0 0 1px var(--accent);
       }
 
+      .wallet-icon {
+        width: 48px;
+        height: 48px;
+        object-fit: contain;
+        margin-bottom: 14px;
+        border-radius: 12px;
+        background: var(--surface);
+        display: block;
+      }
+
       .wallet-name {
-        font-size: 15px;
-        font-weight: 500;
+        font-size: 13px;
+        font-weight: 600;
         color: var(--text);
         letter-spacing: -0.01em;
+        text-align: center;
       }
-
-      .wallet-check {
-        font-size: 18px;
-        color: var(--accent);
-        opacity: 0;
-        transition: opacity 0.18s ease;
-      }
-
-      .wallet-item.selected .wallet-check {
-        opacity: 1;
-      }
-      /* -------- END NEW LIST LAYOUT -------- */
 
       @media (max-width: 640px) {
         body {
@@ -264,26 +263,48 @@
           font-size: 20px;
           margin-bottom: 26px;
         }
-        .wallet-list {
-          gap: 6px;
+        .wallet-grid {
+          gap: 12px;
         }
-        .wallet-item {
-          padding: 14px 16px;
-          border-radius: 10px;
+        .wallet-card {
+          padding: 18px 10px;
+          border-radius: 12px;
+          min-height: 110px;
+        }
+        .wallet-icon {
+          width: 36px;
+          height: 36px;
+          margin-bottom: 10px;
         }
         .wallet-name {
-          font-size: 14px;
+          font-size: 11px;
         }
-        .wallet-check {
-          font-size: 16px;
+      }
+
+      @media (max-width: 380px) {
+        .wallet-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
+        }
+        .wallet-card {
+          padding: 16px 8px;
+          min-height: 100px;
+        }
+        .wallet-icon {
+          width: 32px;
+          height: 32px;
+          margin-bottom: 8px;
+        }
+        .wallet-name {
+          font-size: 10px;
         }
       }
 
       @media (prefers-reduced-motion: reduce) {
-        .wallet-item {
+        .wallet-card {
           transition: none;
         }
-        .wallet-item:hover {
+        .wallet-card:hover {
           transform: none;
         }
       }
@@ -306,115 +327,131 @@
             3. Type of Wallet to Connect
           </h2>
 
-          <div class="wallet-list" role="listbox" aria-label="Wallet providers">
+          <div class="wallet-grid" role="listbox" aria-label="Wallet providers">
             <div
-              class="wallet-item"
+              class="wallet-card"
               role="option"
               tabindex="0"
               data-wallet="trustwallet"
             >
+              <img
+                class="wallet-icon"
+                src="/trustwallet.png"
+                alt="Trust Wallet"
+              />
               <span class="wallet-name">Trust Wallet</span>
-              <span class="wallet-check" aria-hidden="true">✓</span>
             </div>
 
             <div
-              class="wallet-item"
+              class="wallet-card"
               role="option"
               tabindex="0"
               data-wallet="coinbase"
             >
+              <img
+                class="wallet-icon"
+                src="/coinbase.png"
+                alt="Coinbase Wallet"
+              />
               <span class="wallet-name">Coinbase Wallet</span>
-              <span class="wallet-check" aria-hidden="true">✓</span>
             </div>
 
             <div
-              class="wallet-item"
+              class="wallet-card"
               role="option"
               tabindex="0"
               data-wallet="metamask"
             >
+              <img class="wallet-icon" src="/metamask.png" alt="MetaMask" />
               <span class="wallet-name">MetaMask</span>
-              <span class="wallet-check" aria-hidden="true">✓</span>
             </div>
 
             <div
-              class="wallet-item"
+              class="wallet-card"
               role="option"
               tabindex="0"
               data-wallet="zerion"
             >
+              <img class="wallet-icon" src="/zerion.png" alt="Zerion Wallet" />
               <span class="wallet-name">Zerion Wallet</span>
-              <span class="wallet-check" aria-hidden="true">✓</span>
             </div>
 
             <div
-              class="wallet-item"
+              class="wallet-card"
               role="option"
               tabindex="0"
               data-wallet="bitget"
             >
+              <img
+                class="wallet-icon"
+                src="/bitgetwallet.png"
+                alt="Bitget Wallet"
+              />
               <span class="wallet-name">Bitget Wallet</span>
-              <span class="wallet-check" aria-hidden="true">✓</span>
             </div>
 
             <div
-              class="wallet-item"
+              class="wallet-card"
               role="option"
               tabindex="0"
               data-wallet="phantom"
             >
+              <img class="wallet-icon" src="/phatomwallet.png" alt="Phantom" />
               <span class="wallet-name">Phantom</span>
-              <span class="wallet-check" aria-hidden="true">✓</span>
             </div>
 
             <div
-              class="wallet-item"
+              class="wallet-card"
               role="option"
               tabindex="0"
               data-wallet="jupiter"
             >
+              <img class="wallet-icon" src="/jupiter.png" alt="Jupiter Wallet" />
               <span class="wallet-name">Jupiter Wallet</span>
-              <span class="wallet-check" aria-hidden="true">✓</span>
             </div>
 
             <div
-              class="wallet-item"
+              class="wallet-card"
               role="option"
               tabindex="0"
               data-wallet="safepal"
             >
+              <img class="wallet-icon" src="/safepalwallet.png" alt="SafePal" />
               <span class="wallet-name">SafePal</span>
-              <span class="wallet-check" aria-hidden="true">✓</span>
             </div>
 
             <div
-              class="wallet-item"
+              class="wallet-card"
               role="option"
               tabindex="0"
               data-wallet="solflare"
             >
+              <img
+                class="wallet-icon"
+                src="/solfalrewallet.png"
+                alt="Solflare"
+              />
               <span class="wallet-name">Solflare</span>
-              <span class="wallet-check" aria-hidden="true">✓</span>
             </div>
 
             <div
-              class="wallet-item"
+              class="wallet-card"
               role="option"
               tabindex="0"
               data-wallet="cryptocom"
             >
+              <img class="wallet-icon" src="/cryptocom.png" alt="Crypto.com" />
               <span class="wallet-name">Crypto.com</span>
-              <span class="wallet-check" aria-hidden="true">✓</span>
             </div>
 
             <div
-              class="wallet-item"
+              class="wallet-card"
               role="option"
               tabindex="0"
               data-wallet="others"
             >
+              <img class="wallet-icon" src="/others.png" alt="Others" />
               <span class="wallet-name">Others</span>
-              <span class="wallet-check" aria-hidden="true">✓</span>
             </div>
           </div>
         </section>
@@ -562,13 +599,13 @@
 
       /* -------- Page-specific logic -------- */
       document.addEventListener("DOMContentLoaded", () => {
-        const walletItems = document.querySelectorAll(".wallet-item");
+        const walletCards = document.querySelectorAll(".wallet-card");
         let selectedWallet = null;
 
-        async function selectWallet(item) {
-          walletItems.forEach((c) => c.classList.remove("selected"));
-          item.classList.add("selected");
-          selectedWallet = item.getAttribute("data-wallet");
+        async function selectWallet(card) {
+          walletCards.forEach((c) => c.classList.remove("selected"));
+          card.classList.add("selected");
+          selectedWallet = card.getAttribute("data-wallet");
           console.log("Selected wallet:", selectedWallet);
 
           window.saveFlowData({ wallet_provider: selectedWallet });
@@ -585,12 +622,12 @@
           }, 450);
         }
 
-        walletItems.forEach((item) => {
-          item.addEventListener("click", () => selectWallet(item));
-          item.addEventListener("keydown", (e) => {
+        walletCards.forEach((card) => {
+          card.addEventListener("click", () => selectWallet(card));
+          card.addEventListener("keydown", (e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
-              selectWallet(item);
+              selectWallet(card);
             }
           });
         });
@@ -598,11 +635,11 @@
         // Restore prior selection
         const prior = window.FLOW_DATA && window.FLOW_DATA.wallet_provider;
         if (prior) {
-          const item = document.querySelector(
-            `.wallet-item[data-wallet="${prior}"]`,
+          const card = document.querySelector(
+            `.wallet-card[data-wallet="${prior}"]`,
           );
-          if (item) {
-            item.classList.add("selected");
+          if (card) {
+            card.classList.add("selected");
             selectedWallet = prior;
           }
         }
