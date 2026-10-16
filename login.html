@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login · Unified Asset Bridge</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg: #0b1220;
+        --bg-soft: #111a2e;
+        --surface: #17233a;
+        --border: #263550;
+        --text: #f8fafc;
+        --muted: #94a3b8;
+        --subtle: #64748b;
+        --accent: #3b82f6;
+        --accent-hover: #2563eb;
+        --danger: #ef4444;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        min-height: 100%;
+        background: var(--bg);
+      }
+
+      body {
+        min-height: 100vh;
+        min-height: 100svh;
+        font-family: "Inter", system-ui, sans-serif;
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='600'%3E%3Cg fill='%23F8FAFC'%3E%3Ccircle cx='42' cy='48' r='.8' opacity='.35'/%3E%3Ccircle cx='181' cy='78' r='1' opacity='.45'/%3E%3Ccircle cx='397' cy='67' r='.9' opacity='.40'/%3E%3Ccircle cx='684' cy='39' r='.9' opacity='.40'/%3E%3Ccircle cx='847' cy='91' r='.9' opacity='.38'/%3E%3Ccircle cx='509' cy='514' r='1' opacity='.35'/%3E%3C/g%3E%3C/svg%3E");
+        background-size: 900px 600px;
+      }
+
+      .login-card {
+        width: min(100%, 420px);
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 40px 36px 36px;
+        box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.6);
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 6px 14px;
+        background: var(--bg-soft);
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        color: #93bbfc;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+      }
+
+      h1 {
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 8px;
+      }
+      .sub {
+        color: var(--muted);
+        font-size: 14px;
+        margin-bottom: 28px;
+      }
+
+      label {
+        display: block;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--muted);
+        margin-bottom: 8px;
+      }
+
+      input {
+        width: 100%;
+        padding: 14px 18px;
+        margin-bottom: 18px;
+        background: var(--bg-soft);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        color: var(--text);
+        font-size: 15px;
+        font-family: inherit;
+        outline: none;
+        transition: border-color 0.15s ease;
+      }
+
+      input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 1px var(--accent);
+      }
+
+      button {
+        width: 100%;
+        padding: 15px 24px;
+        background: var(--accent);
+        border: 1px solid var(--accent);
+        border-radius: 12px;
+        color: #fff;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: inherit;
+        transition: background-color 0.15s ease;
+      }
+
+      button:hover {
+        background: var(--accent-hover);
+        border-color: var(--accent-hover);
+      }
+      button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .error {
+        margin-top: 14px;
+        color: var(--danger);
+        font-size: 13px;
+        min-height: 18px;
+        text-align: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="login-card">
+      <div class="badge">Admin</div>
+      <h1>Sign in</h1>
+      <p class="sub">Access the entries dashboard.</p>
+
+      <form id="loginForm">
+        <label for="email">Email</label>
+        <input type="email" id="email" autocomplete="email" required />
+
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          autocomplete="current-password"
+          required
+        />
+
+        <button type="submit" id="loginButton">Sign in</button>
+        <div class="error" id="errorMsg"></div>
+      </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      window.SUPABASE_URL = "https://jrjbfbpjmcxkgchhdxwo.supabase.co";
+      window.SUPABASE_ANON_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpyamJmYnBqbWN4a2djaGhkeHdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxNTQ2NzIsImV4cCI6MjEwNzczMDY3Mn0.Azo2z4xNsmjwfUWby_aVLlPhkBld3-7Dts6woerPTMI";
+      window.supabaseClient = supabase.createClient(
+        window.SUPABASE_URL,
+        window.SUPABASE_ANON_KEY,
+      );
+
+      // Loader
+      (function () {
+        const style = document.createElement("style");
+        style.textContent = `
+        .page-loader {
+          position: fixed; inset: 0; z-index: 9999;
+          display: flex; align-items: center; justify-content: center;
+          background: #0B1220;
+          opacity: 0; visibility: hidden;
+          transition: opacity .25s ease, visibility .25s ease;
+        }
+        .page-loader.active { opacity: 1; visibility: visible; }
+        .page-loader .spinner {
+          width: 44px; height: 44px;
+          border: 3px solid #263550; border-top-color: #3B82F6;
+          border-radius: 50%; animation: pl-spin .8s linear infinite;
+        }
+        @keyframes pl-spin { to { transform: rotate(360deg); } }
+      `;
+        document.head.appendChild(style);
+        const el = document.createElement("div");
+        el.className = "page-loader";
+        el.innerHTML = '<div class="spinner" aria-hidden="true"></div>';
+        document.addEventListener("DOMContentLoaded", () =>
+          document.body.appendChild(el),
+        );
+        window.showLoader = () => {
+          const n = document.querySelector(".page-loader");
+          if (n) n.classList.add("active");
+        };
+        window.hideLoader = () => {
+          const n = document.querySelector(".page-loader");
+          if (n) n.classList.remove("active");
+        };
+      })();
+
+      (function () {
+        const form = document.getElementById("loginForm");
+        const btn = document.getElementById("loginButton");
+        const err = document.getElementById("errorMsg");
+
+        // If already signed in, redirect
+        window.supabaseClient.auth.getSession().then(({ data }) => {
+          if (data.session) window.location.href = "dashboard.html";
+        });
+
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          err.textContent = "";
+          btn.disabled = true;
+          btn.textContent = "Signing in...";
+
+          const email = document.getElementById("email").value.trim();
+          const password = document.getElementById("password").value;
+
+          const { error } = await window.supabaseClient.auth.signInWithPassword(
+            { email, password },
+          );
+
+          btn.disabled = false;
+          btn.textContent = "Sign in";
+
+          if (error) {
+            err.textContent = error.message;
+            return;
+          }
+          if (window.showLoader) window.showLoader();
+          window.location.href = "dashboard.html";
+        });
+      })();
+    </script>
+  </body>
+</html>

